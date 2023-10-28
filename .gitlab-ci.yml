@@ -1,0 +1,26 @@
+stages:
+  - build
+  - test
+
+services:
+  - name: postgres:latest
+    alias: db
+
+variables:
+  POSTGRES_DB: todo_db
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+
+build:
+  script:
+    - docker-compose build
+  only:
+    - master
+
+test:
+  script:
+    - docker-compose up -d
+    - docker-compose exec app npm test
+    - docker-compose down
+  only:
+    - master
